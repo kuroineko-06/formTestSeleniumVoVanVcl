@@ -114,11 +114,11 @@ function App() {
 
           {/* right-page */}
           <div className="w-7/12 h-3/4 mt-10 float-end">
-            <div className="w-4/5 h-full mt-5 m-auto border-x-2 border-y-2">
+            <div className="w-4/5 h-full mt-5 m-auto border-x-2 border-y-2 overflow-y-auto max-h-60">
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                    <div className="overflow-hidden">
+                    <div className="overflow-hiden">
                       <table className="min-w-full text-left text-sm font-light">
                         <thead className="border-b font-medium dark:border-neutral-500">
                           <tr>
