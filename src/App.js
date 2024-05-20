@@ -20,8 +20,8 @@ function App() {
 
   // Handle form submission
   const handleSubmit = () => {
-    if (elementType != "" && attribute != "" && key != "") {
-      if (elementType == "button" && indexData == "") {
+    if (elementType !== "" && attribute !== "" && key !== "") {
+      if (elementType === "button" && indexData === "") {
         console.log("Set Url Data:", url);
         console.log("Set ElementType Data:", elementType);
         console.log("Set Attribute Data:", attribute);
@@ -32,17 +32,13 @@ function App() {
           attribute,
           key,
           indexData,
-          result: "", // Assuming result will be calculated or added later
+          result: "",
         };
         setTableData([...tableData, newRow]);
 
-        // console.log("Set Table Data:", setTableData);
-        // Clear input fields
-        // setElementType("");
-        // setAttribute("");
         setKey("");
         setIndexData("");
-      } else if (elementType != "button" && indexData != "") {
+      } else if (elementType !== "button" && indexData !== "") {
         console.log("Set Url Data:", url);
         console.log("Set ElementType Data:", elementType);
         console.log("Set Attribute Data:", attribute);
@@ -53,17 +49,13 @@ function App() {
           attribute,
           key,
           indexData,
-          result: "", // Assuming result will be calculated or added later
+          result: "",
         };
         setTableData([...tableData, newRow]);
 
-        // console.log("Set Table Data:", setTableData);
-        // Clear input fields
-        // setElementType("");
-        // setAttribute("");
         setKey("");
         setIndexData("");
-      } else if (elementType != "button" && indexData == "") {
+      } else if (elementType !== "button" && indexData === "") {
         alert("Please fill all data!!!");
       }
     } else {
