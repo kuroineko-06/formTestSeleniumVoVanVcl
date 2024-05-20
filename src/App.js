@@ -9,25 +9,83 @@ function App() {
   const [key, setKey] = useState("");
   const [indexData, setIndexData] = useState("");
 
+  const handleChangeUrl = (e) => setUrl(e.target.value);
+  const handleChangeE_Type = (e) => setElementType(e.target.value);
+  const handleChangeAttribute = (e) => setAttribute(e.target.value);
+  const handleChangeKey = (e) => setKey(e.target.value);
+  const handleChangeIndexData = (e) => setIndexData(e.target.value);
+
   // State to store the table data
   const [tableData, setTableData] = useState([]);
 
   // Handle form submission
   const handleSubmit = () => {
-    const newRow = {
-      elementType,
-      attribute,
-      key,
-      indexData,
-      result: "", // Assuming result will be calculated or added later
-    };
-    setTableData([...tableData, newRow]);
+    if (elementType != "" && attribute != "" && key != "") {
+      if (elementType == "button" && indexData == "") {
+        console.log("Set Url Data:", url);
+        console.log("Set ElementType Data:", elementType);
+        console.log("Set Attribute Data:", attribute);
+        console.log("Set Key Data:", key);
+        console.log("Set IndexData Data:", indexData);
+        const newRow = {
+          elementType,
+          attribute,
+          key,
+          indexData,
+          result: "", // Assuming result will be calculated or added later
+        };
+        setTableData([...tableData, newRow]);
 
-    // Clear input fields
-    setElementType("");
-    setAttribute("");
-    setKey("");
-    setIndexData("");
+        // console.log("Set Table Data:", setTableData);
+        // Clear input fields
+        // setElementType("");
+        // setAttribute("");
+        setKey("");
+        setIndexData("");
+      } else if (elementType != "button" && indexData != "") {
+        console.log("Set Url Data:", url);
+        console.log("Set ElementType Data:", elementType);
+        console.log("Set Attribute Data:", attribute);
+        console.log("Set Key Data:", key);
+        console.log("Set IndexData Data:", indexData);
+        const newRow = {
+          elementType,
+          attribute,
+          key,
+          indexData,
+          result: "", // Assuming result will be calculated or added later
+        };
+        setTableData([...tableData, newRow]);
+
+        // console.log("Set Table Data:", setTableData);
+        // Clear input fields
+        // setElementType("");
+        // setAttribute("");
+        setKey("");
+        setIndexData("");
+      } else if (elementType != "button" && indexData == "") {
+        alert("Please fill all data!!!");
+      }
+    } else {
+      alert("Please fill all data!!!");
+    }
+  };
+
+  const runSeleniumTest = async () => {
+    console.log("Data Table:", [...tableData]);
+    try {
+      const response = await fetch("http://localhost:8080/run_test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -46,7 +104,7 @@ function App() {
               name="URL"
               placeholder="Set your URL"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={handleChangeUrl}
             />
           </div>
         </div>
@@ -59,28 +117,35 @@ function App() {
               <label htmlFor="element_type" className="mr-3">
                 Element Type:
               </label>
-              <input
-                className="w-1/2"
-                type="text"
+
+              <select
                 name="element_type"
-                placeholder="Set your Element Type"
-                value={elementType}
-                onChange={(e) => setElementType(e.target.value)}
-              />
+                defaultValue={elementType || ""}
+                id="element_type"
+                onChange={handleChangeE_Type}
+              >
+                <option value="" hidden></option>
+                <option value="text_box">Text Box</option>
+                <option value="button">Button</option>
+              </select>
             </div>
             {/* attribute */}
             <div className="w-4/5 h-10  mt-5">
               <label htmlFor="attribute" className="mr-3">
                 Attribute:
               </label>
-              <input
-                className="w-1/2"
-                type="text"
+
+              <select
                 name="attribute"
-                placeholder="Set your Attribute"
-                value={attribute}
-                onChange={(e) => setAttribute(e.target.value)}
-              />
+                id="attribute"
+                onChange={handleChangeAttribute}
+                defaultValue={attribute || ""}
+              >
+                <option value="" hidden></option>
+                <option value="id">ID</option>
+                <option value="name">Name</option>
+                <option value="x-path">X-PATH</option>
+              </select>
             </div>
             {/* key */}
             <div className="w-4/5 h-10  mt-5">
@@ -93,7 +158,7 @@ function App() {
                 name="key"
                 placeholder="Set your Key"
                 value={key}
-                onChange={(e) => setKey(e.target.value)}
+                onChange={handleChangeKey}
               />
             </div>
             {/* index_data */}
@@ -101,26 +166,36 @@ function App() {
               <label htmlFor="index_data" className="mr-3">
                 Index Data:
               </label>
-              <input
-                className="w-1/2"
-                type="text"
-                name="index_data"
-                placeholder="Set your Data"
-                value={indexData}
-                onChange={(e) => setIndexData(e.target.value)}
-              />
+              {elementType != "button" ? (
+                <input
+                  className="w-1/2"
+                  type="text"
+                  name="index_data"
+                  placeholder="Set your Data"
+                  value={indexData}
+                  onChange={handleChangeIndexData}
+                />
+              ) : (
+                <input
+                  className="w-1/2"
+                  placeholder="Set your Data"
+                  value=""
+                  onChange={handleChangeIndexData}
+                  disabled
+                />
+              )}
             </div>
           </div>
 
           {/* right-page */}
           <div className="w-7/12 h-3/4 mt-10 float-end">
-            <div className="w-4/5 h-full mt-5 m-auto border-x-2 border-y-2 overflow-y-auto max-h-60">
+            <div className="w-4/5 h-full mt-5 m-auto border-x-2 border-y-2 overflow-y-auto overflow-x-hidden max-h-60">
               <div className="flex flex-col">
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                   <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                     <div className="overflow-hiden">
-                      <table className="min-w-full text-left text-sm font-light">
-                        <thead className="border-b font-medium dark:border-neutral-500">
+                      <table className="min-w-full text-left text-sm font-light overflow-x-hidden">
+                        <thead className="border-b font-medium dark:border-neutral-500 bg-gray-200">
                           <tr>
                             <th scope="col" className="px-6 py-4">
                               #
@@ -180,7 +255,10 @@ function App() {
 
         {/* button */}
         <div className="w-full h-14">
-          <button className="w-20 h-10 bg-blue-500 float-end mr-10 text-white">
+          <button
+            className="w-20 h-10 bg-blue-500 float-end mr-10 text-white"
+            onClick={runSeleniumTest}
+          >
             Test
           </button>
           <button
